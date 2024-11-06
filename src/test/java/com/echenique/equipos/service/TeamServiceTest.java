@@ -51,8 +51,8 @@ class TeamServiceTest {
             .build();
 
 
-    private List<Team> listOfTeams = List.of(okTeamBelgrano, okTeamBoca);
-    private List<TeamInformationResponse> listOfTeamsInformatio = List.of(okTeamInformationBelgrano, okTeamInformationBoca);
+    private final List<Team> listOfTeams = List.of(okTeamBelgrano, okTeamBoca);
+    private final List<TeamInformationResponse> listOfTeamsInformatio = List.of(okTeamInformationBelgrano, okTeamInformationBoca);
     @Test
     void whenGetAllTeamsIsOk(){
         when(teamRepository.findAll()).thenReturn(listOfTeams);
