@@ -1,7 +1,14 @@
 package com.echenique.equipos.exception;
 
+import lombok.Getter;
+
+@Getter
 public class TeamNotFoundException extends RuntimeException{
-    public TeamNotFoundException(){
-        super("Equipo no encontrado");
+    private final transient DefaultExceptionDescription defaultExceptionDescription;
+
+    public TeamNotFoundException(DefaultExceptionDescription description){
+        super(description.getDetail());
+        this.defaultExceptionDescription = description;
+
     }
 }

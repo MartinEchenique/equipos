@@ -1,5 +1,6 @@
 package com.echenique.equipos.security;
 
+import com.echenique.equipos.exception.DefaultExceptionDescription;
 import com.echenique.equipos.exception.InvalidAuthenticationException;
 import jakarta.annotation.Nonnull;
 import jakarta.servlet.FilterChain;
@@ -11,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.security.interfaces.RSAPublicKey;
 
@@ -22,7 +22,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     private final RSAPublicKey rsaPublicKey;
     @Override
     protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response,
-                                    @Nonnull FilterChain filterChain) throws IOException {
+                                    @Nonnull FilterChain filterChain) {
         try {
 
             final String authorization = request.getHeader(AUTHORIZATION_HEADER);
@@ -35,7 +35,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             filterChain.doFilter(request, response);
         } catch (InvalidParameterException e) {
-            throw new InvalidAuthenticationException("Invalid authentication parameter " + e.getMessage());
+            throw new InvalidAuthenticationException(DefaultExceptionDescription.builder()
+                    .action("AUTHENTICATING BY JWT")
+                    .detail(e.getMessage())
+                    .build());
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }

@@ -1,7 +1,14 @@
 package com.echenique.equipos.exception;
 
+import lombok.Getter;
+
+@Getter
 public class InvalidRequestException extends RuntimeException{
-    public InvalidRequestException(){
-        super("La solicitud es invalida");
+    private final transient DefaultExceptionDescription defaultExceptionDescription;
+
+    public InvalidRequestException(DefaultExceptionDescription description){
+        super(description.getDetail());
+        this.defaultExceptionDescription = description;
+
     }
 }

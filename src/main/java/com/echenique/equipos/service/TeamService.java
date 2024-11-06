@@ -2,6 +2,7 @@ package com.echenique.equipos.service;
 
 import com.echenique.equipos.dto.TeamAllInfoDto;
 import com.echenique.equipos.dto.TeamDescriptionDto;
+import com.echenique.equipos.exception.DefaultExceptionDescription;
 import com.echenique.equipos.exception.InvalidRequestException;
 import com.echenique.equipos.exception.TeamNotFoundException;
 import com.echenique.equipos.model.Team;
@@ -20,7 +21,11 @@ public class TeamService {
         return teamRepository.findAll().stream().map(TeamAllInfoDto::buildFromTeam).toList();
     }
     public TeamAllInfoDto getTeamById(Long id) throws TeamNotFoundException {
-        Team teamEntity = teamRepository.findById(id).orElseThrow(TeamNotFoundException::new);
+        Team teamEntity = teamRepository.findById(id)
+                .orElseThrow(() -> new TeamNotFoundException(DefaultExceptionDescription.builder()
+                        .action("GETTING TEAM BY ID")
+                        .detail("FOR ID " + id)
+                        .build()));
         return TeamAllInfoDto.buildFromTeam(teamEntity);
     }
     public List<TeamAllInfoDto> getTeamByName(String name) {
@@ -37,13 +42,21 @@ public class TeamService {
             return TeamAllInfoDto.buildFromTeam(teamEntity);
         }
         catch(Exception exception){
-            throw new InvalidRequestException();
+            throw new InvalidRequestException(DefaultExceptionDescription.builder()
+                    .action("CREATING NEW TEAM")
+                    .detail("FOR REQUEST " + teamInfo)
+                    .build());
         }
     }
     @Transactional
     public TeamAllInfoDto updateTeam(TeamDescriptionDto teamNewInfo, Long id) throws TeamNotFoundException {
         int modifiedTeamsAmount = teamRepository.setTeamInfoById(teamNewInfo, id);
-        if(modifiedTeamsAmount == 0)throw new TeamNotFoundException();
+        if(modifiedTeamsAmount == 0){
+            throw new TeamNotFoundException(DefaultExceptionDescription.builder()
+                .action("UPDATING TEAM")
+                .detail("FOR ID " + id)
+                .build());
+        }
 
         return TeamAllInfoDto.builder()
                 .id(id)
@@ -54,7 +67,11 @@ public class TeamService {
 
     }
     public void deleteTeam(Long id) throws TeamNotFoundException {
-        Team teamToDelete = teamRepository.findById(id).orElseThrow(TeamNotFoundException::new);
+        Team teamToDelete = teamRepository.findById(id)
+                .orElseThrow(() -> new TeamNotFoundException(DefaultExceptionDescription.builder()
+                .action("DELETING TEAM BY ID")
+                .detail("FOR ID " + id)
+                .build()));
         teamRepository.delete(teamToDelete);
     }
 }

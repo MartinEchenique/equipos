@@ -13,6 +13,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -41,6 +42,7 @@ public class SecurityConfiguration {
     @Primary
     public SecurityFilterChain filterChain(HttpSecurity http, RSAPublicKey rsaPublicKey) throws Exception {
         return http
+                .csrf(AbstractHttpConfigurer::disable)// NOSONAR: We are sure that disabling CSRF protection is safe in this context given that we use jwt authentication.
                 .authorizeHttpRequests(authorizeRequest -> authorizeRequest
                         .requestMatchers("/equipos/**").authenticated()
                         .anyRequest().permitAll())

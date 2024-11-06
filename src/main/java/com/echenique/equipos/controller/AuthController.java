@@ -3,10 +3,11 @@ package com.echenique.equipos.controller;
 import com.echenique.equipos.dto.AuthenticationDto;
 import com.echenique.equipos.dto.TokenDto;
 import com.echenique.equipos.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    @GetMapping(value = "/login")
+    @Operation(summary = "Permite obtener token de autenticacion mediante el uso de usuario y contraseña.")
+    @PostMapping(value = "/login")
     public ResponseEntity<TokenDto> login(@RequestBody AuthenticationDto authenticationDto) {
         try {
             String token = authService.login(authenticationDto);

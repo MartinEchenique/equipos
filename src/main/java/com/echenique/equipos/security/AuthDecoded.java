@@ -16,7 +16,6 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Component
 public class AuthDecoded {
-    private static final String ALGORITHM = "RSA";
     public static final String USERNAME_CLAIM_KEY = "USERNAME";
     private DecodedJWT decodedJWT;
     public AuthDecoded(String authorizationHeader, RSAPublicKey rsaPublicKey) {
