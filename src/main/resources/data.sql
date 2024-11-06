@@ -25,3 +25,6 @@ INSERT INTO TEAM(NAME,LEAGUE,COUNTRY) VALUES
 ('Atlético Madrid','La Liga','España');
 
 
+
+INSERT INTO APPUSER(USERNAME, PASSWORD) VALUES ('test','$2a$10$oT5BYua4lbridN.25R21iekikzJhMmJSLQcuKb/Tci24lhLwEOwXK');
+

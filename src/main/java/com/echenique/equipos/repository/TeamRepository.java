@@ -12,7 +12,6 @@ import java.util.List;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
-    List<Team> findByName(String name);
     List<Team> findByNameIgnoreCaseContaining(String name);
     @Modifying
     @Query("update Team t set t.name = :#{#team.name}, t.league = :#{#team.league}, t.country = :#{#team.country} where t.id = :#{#id}")
