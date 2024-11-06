@@ -1,7 +1,7 @@
-package com.echenique.equipos.dto;
+package com.echenique.equipos.request;
 
-import com.echenique.equipos.model.Team;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,20 +15,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class TeamDescriptionDto {
-
+public class TeamDescriptionRequest {
         @JsonProperty("nombre")
+        @NotNull(message="nombre can not be null")
         private String name;
         @JsonProperty("liga")
+        @NotNull(message="liga can not be null")
         private String league;
         @JsonProperty("pais")
+        @NotNull(message="pais can not be null")
         private String country;
-        public static TeamDescriptionDto buildFromTeam(Team team){
-                return TeamDescriptionDto.builder()
-                        .name(team.getName())
-                        .country(team.getCountry())
-                        .league(team.getLeague())
-                        .build();
-        }
-
 }

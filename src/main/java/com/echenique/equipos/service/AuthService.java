@@ -3,7 +3,7 @@ package com.echenique.equipos.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.echenique.equipos.configuration.SecurityConfiguration;
-import com.echenique.equipos.dto.AuthenticationDto;
+import com.echenique.equipos.request.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ public class AuthService {
     private final RSAPrivateKey privateKey;
     private final SecurityConfiguration securityConfiguration;
 
-    public String login(AuthenticationDto authenticationDto){
+    public String login(AuthenticationRequest authenticationDto){
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(authenticationDto.getUsername(), authenticationDto.getPassword());
         Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
         return getToken(authenticationResponse.getName());

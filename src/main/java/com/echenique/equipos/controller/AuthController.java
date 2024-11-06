@@ -1,9 +1,10 @@
 package com.echenique.equipos.controller;
 
-import com.echenique.equipos.dto.AuthenticationDto;
-import com.echenique.equipos.dto.TokenDto;
+import com.echenique.equipos.request.AuthenticationRequest;
+import com.echenique.equipos.response.AuthResponse;
 import com.echenique.equipos.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,10 @@ public class AuthController {
     private final AuthService authService;
     @Operation(summary = "Permite obtener token de autenticacion mediante el uso de usuario y contraseña.")
     @PostMapping(value = "/login")
-    public ResponseEntity<TokenDto> login(@RequestBody AuthenticationDto authenticationDto) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthenticationRequest authenticationRequest) {
         try {
-            String token = authService.login(authenticationDto);
-            return ResponseEntity.ok(TokenDto.builder().token(token).build());
+            String token = authService.login(authenticationRequest);
+            return ResponseEntity.ok(AuthResponse.builder().token(token).build());
         }catch(Exception ex){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();}
     }

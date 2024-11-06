@@ -1,12 +1,14 @@
 package com.echenique.equipos.controller;
 
-import com.echenique.equipos.dto.DefaultExceptionResponse;
+import com.echenique.equipos.response.DefaultExceptionResponse;
 import com.echenique.equipos.exception.InvalidAuthenticationException;
 import com.echenique.equipos.exception.InvalidRequestException;
 import com.echenique.equipos.exception.TeamNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -20,7 +22,7 @@ public class ControllerAdvice {
         LOGGER.error(":::: TEAM NOT FOUND {}::::", ex.getDefaultExceptionDescription());
         return DefaultExceptionResponse
                 .builder()
-                .message(ex.getMessage())
+                .message("Equipo no encontrado")
                 .code(HttpStatus.NOT_FOUND.value())
                 .build();
     }
@@ -30,7 +32,17 @@ public class ControllerAdvice {
         LOGGER.error(":::: INVALID REQUEST {}::::", ex.getDefaultExceptionDescription());
         return DefaultExceptionResponse
                 .builder()
-                .message(ex.getMessage())
+                .message("La solicitud es invalida")
+                .code(HttpStatus.BAD_REQUEST.value())
+                .build();
+    }
+    @ExceptionHandler(value =  MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public DefaultExceptionResponse argumentNotValid(MethodArgumentNotValidException ex) {
+        LOGGER.error(":::: INVALID REQUEST {}::::", ex.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).toList());
+        return DefaultExceptionResponse
+                .builder()
+                .message("La solicitud es invalida")
                 .code(HttpStatus.BAD_REQUEST.value())
                 .build();
     }
@@ -40,8 +52,10 @@ public class ControllerAdvice {
         LOGGER.error(":::: INVALID AUTHENTICATION {}::::", ex.getDefaultExceptionDescription());
         return DefaultExceptionResponse
                 .builder()
-                .message(ex.getMessage())
+                .message("La solicitud es invalida")
                 .code(HttpStatus.UNAUTHORIZED.value())
                 .build();
     }
+
+
 }

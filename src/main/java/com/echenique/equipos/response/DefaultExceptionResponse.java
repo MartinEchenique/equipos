@@ -1,4 +1,4 @@
-package com.echenique.equipos.dto;
+package com.echenique.equipos.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

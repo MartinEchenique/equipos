@@ -1,4 +1,4 @@
-package com.echenique.equipos.dto;
+package com.echenique.equipos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +13,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class TokenDto {
+public class AuthResponse {
     private String token;
 }

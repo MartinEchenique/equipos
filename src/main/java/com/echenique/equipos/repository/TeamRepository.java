@@ -1,6 +1,6 @@
 package com.echenique.equipos.repository;
 
-import com.echenique.equipos.dto.TeamDescriptionDto;
+import com.echenique.equipos.request.TeamDescriptionRequest;
 import com.echenique.equipos.model.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,5 +15,5 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     List<Team> findByNameIgnoreCaseContaining(String name);
     @Modifying
     @Query("update Team t set t.name = :#{#team.name}, t.league = :#{#team.league}, t.country = :#{#team.country} where t.id = :#{#id}")
-    int setTeamInfoById(@Param("team") TeamDescriptionDto team, @Param("id") Long id);
+    int setTeamInfoById(@Param("team") TeamDescriptionRequest team, @Param("id") Long id);
 }

@@ -1,7 +1,7 @@
 package com.echenique.equipos.service;
 
-import com.echenique.equipos.dto.TeamAllInfoDto;
-import com.echenique.equipos.dto.TeamDescriptionDto;
+import com.echenique.equipos.response.TeamInformationResponse;
+import com.echenique.equipos.request.TeamDescriptionRequest;
 import com.echenique.equipos.exception.DefaultExceptionDescription;
 import com.echenique.equipos.exception.InvalidRequestException;
 import com.echenique.equipos.exception.TeamNotFoundException;
@@ -17,21 +17,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamService {
     private final TeamRepository teamRepository;
-    public List<TeamAllInfoDto> getAllTeams(){
-        return teamRepository.findAll().stream().map(TeamAllInfoDto::buildFromTeam).toList();
+
+    public List<TeamInformationResponse> getAllTeams(){
+        return teamRepository.findAll().stream().map(TeamInformationResponse::buildFromTeam).toList();
     }
-    public TeamAllInfoDto getTeamById(Long id) throws TeamNotFoundException {
+
+    public TeamInformationResponse getTeamById(Long id) throws TeamNotFoundException {
         Team teamEntity = teamRepository.findById(id)
                 .orElseThrow(() -> new TeamNotFoundException(DefaultExceptionDescription.builder()
                         .action("GETTING TEAM BY ID")
                         .detail("FOR ID " + id)
                         .build()));
-        return TeamAllInfoDto.buildFromTeam(teamEntity);
+        return TeamInformationResponse.buildFromTeam(teamEntity);
     }
-    public List<TeamAllInfoDto> getTeamByName(String name) {
-        return teamRepository.findByNameIgnoreCaseContaining(name).stream().map(TeamAllInfoDto::buildFromTeam).toList();
+
+    public List<TeamInformationResponse> getTeamByName(String name) {
+        return teamRepository.findByNameIgnoreCaseContaining(name).stream().map(TeamInformationResponse::buildFromTeam).toList();
     }
-    public TeamAllInfoDto createNewTeam(TeamDescriptionDto teamInfo) throws InvalidRequestException {
+    public TeamInformationResponse createNewTeam(TeamDescriptionRequest teamInfo) throws InvalidRequestException {
         var team = Team.builder()
                 .name(teamInfo.getName())
                 .country(teamInfo.getCountry())
@@ -39,7 +42,7 @@ public class TeamService {
                 .build();
         try {
             Team teamEntity = teamRepository.save(team);
-            return TeamAllInfoDto.buildFromTeam(teamEntity);
+            return TeamInformationResponse.buildFromTeam(teamEntity);
         }
         catch(Exception exception){
             throw new InvalidRequestException(DefaultExceptionDescription.builder()
@@ -48,8 +51,9 @@ public class TeamService {
                     .build());
         }
     }
+
     @Transactional
-    public TeamAllInfoDto updateTeam(TeamDescriptionDto teamNewInfo, Long id) throws TeamNotFoundException {
+    public TeamInformationResponse updateTeam(TeamDescriptionRequest teamNewInfo, Long id) throws TeamNotFoundException {
         int modifiedTeamsAmount = teamRepository.setTeamInfoById(teamNewInfo, id);
         if(modifiedTeamsAmount == 0){
             throw new TeamNotFoundException(DefaultExceptionDescription.builder()
@@ -58,7 +62,7 @@ public class TeamService {
                 .build());
         }
 
-        return TeamAllInfoDto.builder()
+        return TeamInformationResponse.builder()
                 .id(id)
                 .league(teamNewInfo.getLeague())
                 .country(teamNewInfo.getCountry())
@@ -66,6 +70,7 @@ public class TeamService {
                 .build();
 
     }
+
     public void deleteTeam(Long id) throws TeamNotFoundException {
         Team teamToDelete = teamRepository.findById(id)
                 .orElseThrow(() -> new TeamNotFoundException(DefaultExceptionDescription.builder()

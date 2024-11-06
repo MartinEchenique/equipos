@@ -1,5 +1,6 @@
-package com.echenique.equipos.dto;
+package com.echenique.equipos.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @Builder
 @ToString
-public class AuthenticationDto {
+public class AuthenticationRequest {
+    @NotNull(message="username can not be null")
     private String username;
+    @NotNull(message="password can not be null")
     private String password;
 }
