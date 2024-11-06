@@ -56,6 +56,15 @@ public class ControllerAdvice {
                 .code(HttpStatus.UNAUTHORIZED.value())
                 .build();
     }
-
+    @ExceptionHandler(value = Exception.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public DefaultExceptionResponse unexpectedException(InvalidRequestException ex) {
+        LOGGER.error(":::: UNEXPECTED EXCEPTION OCCURRED {}::::", ex.getMessage());
+        return DefaultExceptionResponse
+                .builder()
+                .message("Ocurrio un error al procesar la solicitud.")
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .build();
+    }
 
 }
